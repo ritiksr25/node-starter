@@ -27,11 +27,7 @@ module.exports.catchErrors = middlewareFunction => {
 module.exports.notFound = (req, res) => {
 	logger = log4js.getLogger("Wrong endpoint request");
 	logger.info(`${req.params[0]} has been hit`);
-	sendError(
-		res,
-		"Welcome to API!! This route does not exist",
-		NOT_FOUND
-	);
+	sendError(res, "Welcome to API!! This route does not exist", NOT_FOUND);
 };
 
 module.exports.sendErrors = (err, req, res, next) => {
@@ -42,9 +38,10 @@ module.exports.sendErrors = (err, req, res, next) => {
 	};
 	//logging error for backend console
 	console.log(errorDetailsToSend);
+	console.log(err.stack);
 	logger = log4js.getLogger("Logs from sendErrors middleware");
 	logger.error(errorDetailsToSend);
 	logger.error(err.stack);
 	//sending error to frontend
-	sendError(res, errorDetailsToSend, err.status || SERVER_ERROR);;
+	sendError(res, err.message, err.status || SERVER_ERROR);
 };
