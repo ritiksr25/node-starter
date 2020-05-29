@@ -10,5 +10,5 @@ const {
 const { sendError, sendSuccess } = require("../utility/helpers");
 
 module.exports.index = (req, res) => {
-	sendSuccess(res, "Welcome to DSC-KIET API");
+	sendSuccess(res, "Welcome to the API");
 };
