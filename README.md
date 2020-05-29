@@ -24,7 +24,7 @@ $ git clone https://github.com/ritiksr25/PROJECT_TITLE
 $ cd PROJECT_TITLE
 $ touch .env
 $ cp .env.example .env
-# Copy .env.example to .env, Set values
+# Set values in .env
 $ npm i
 $ npm start
 ```
