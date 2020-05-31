@@ -1,6 +1,6 @@
 # PROJECT_TITLE
 
-[![LIVE](https://img.shields.io/badge/LIVE-VISIT-green?style=?style=flat-square&logo=appveyor)](https://ritiksr25.tech)
+[![LIVE](https://img.shields.io/badge/LIVE-VISIT-green?style=?style=flat-square&logo=appveyor)](<LINK-TO-DEPLOY>)
 
 ---
 
@@ -20,7 +20,7 @@ PROJECT_DESCIPTION
 ## Setup
 
 ```bash
-$ git clone https://github.com/ritiksr25/PROJECT_TITLE
+$ git clone https://github.com/<USERNAME>/PROJECT_TITLE
 $ cd PROJECT_TITLE
 $ touch .env
 $ cp .env.example .env
@@ -29,4 +29,4 @@ $ npm i
 $ npm start
 ```
 
-### Made with ❤️️ by Ritik Srivastava
+### Made with ❤️️ by [NAME](<PROFILE-URL>)
