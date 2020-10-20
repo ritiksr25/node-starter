@@ -1,4 +1,6 @@
 const mongoose = require("mongoose");
+const { logger } = require("../utility/helpers");
+const { SERVER_ERROR } = require("../utility/statusCodes");
 const { NODE_ENV, MONGO_URI } = require("./index");
 
 // Map global promises
@@ -18,6 +20,16 @@ connectDb = async () => {
 		console.info("MongoDB Connected");
 	} catch (err) {
 		console.info(err);
+		logger(
+			"error",
+			"database",
+			{
+				message: err.message,
+				stack: err.stack,
+				status: err.status || SERVER_ERROR
+			},
+			err
+		);
 	}
 };
 connectDb();

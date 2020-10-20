@@ -3,23 +3,15 @@ const log4js = require("log4js");
 
 log4js.configure({
 	appenders: {
-		app: {
-			type: "file",
-			filename: "logs/app.log",
-			maxLogSize: 10485760
-		},
-		errorFile: {
-			type: "file",
-			filename: "logs/errors.log"
-		},
-		errors: {
-			type: "logLevelFilter",
-			level: "ERROR",
-			appender: "errorFile"
-		}
+		server: { type: "file", filename: "logs/server.log" },
+		database: { type: "file", filename: "logs/database.log" },
+		app: { type: "file", filename: "logs/app.log" }
 	},
 	categories: {
-		default: { appenders: ["app", "errors"], level: "DEBUG" }
+		server: { appenders: ["server"], level: "DEBUG" },
+		database: { appenders: ["database"], level: "DEBUG" },
+		app: { appenders: ["app"], level: "DEBUG" },
+		default: { appenders: ["app"], level: "DEBUG" }
 	}
 });
 let logger = log4js.getLogger();
@@ -58,6 +50,15 @@ module.exports.generateHash = length => {
 	return code;
 };
 
+module.exports.generateOtp = length => {
+	let chars = "0123456789";
+	let code = "";
+	for (let i = 0; i < length; i++) {
+		code += chars[Math.round(Math.random() * (chars.length - 1))];
+	}
+	return code;
+};
+
 module.exports.toTitleCase = str => {
 	return str
 		.toLowerCase()
@@ -68,13 +69,12 @@ module.exports.toTitleCase = str => {
 		.join(" ");
 };
 
-module.exports.logger = (type, funcName, message) => {
-	logger = log4js.getLogger(`Logs from ${funcName} function`);
-
-	if (type === "error") logger.error(message);
-	else if (type === "fatal") logger.fatal(message);
-	else if (type === "info") logger.info(message);
-	else if (type === "warn") logger.warn(message);
-	else if (type === "debug") logger.debug(message);
-	else if (type === "trace") logger.trace(message);
+module.exports.logger = (type, category, logObject, err) => {
+	logger = log4js.getLogger(category);
+	if (type === "error") logger.error(logObject);
+	else if (type === "fatal") logger.fatal(logObject);
+	else if (type === "info") logger.info(logObject);
+	else if (type === "warn") logger.warn(logObject);
+	else if (type === "debug") logger.debug(logObject);
+	else if (type === "trace") logger.trace(logObject);
 };

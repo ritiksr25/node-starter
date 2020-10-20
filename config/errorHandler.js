@@ -1,23 +1,12 @@
-const log4js = require("log4js");
 const { sendError } = require("../utility/helpers");
 const { NOT_FOUND, SERVER_ERROR } = require("../utility/statusCodes");
-
-log4js.configure({
-	appenders: { cheese: { type: "file", filename: "server-logs.log" } },
-	categories: { default: { appenders: ["cheese"], level: "error" } }
-});
-let logger = log4js.getLogger();
-logger.level = "debug";
+const { logger } = require("../utility/helpers");
 
 module.exports.catchErrors = middlewareFunction => {
 	return async (req, res, next) => {
 		try {
 			await middlewareFunction(req, res, next);
 		} catch (err) {
-			//log
-			logger = log4js.getLogger("Logs from catchErrors middleware");
-			logger.error(err);
-			//send to next
 			next(err);
 		}
 	};
@@ -25,23 +14,19 @@ module.exports.catchErrors = middlewareFunction => {
 
 // not found routes
 module.exports.notFound = (req, res) => {
-	logger = log4js.getLogger("Wrong endpoint request");
-	logger.info(`${req.params[0]} has been hit`);
 	sendError(res, "Welcome to API!! This route does not exist", NOT_FOUND);
 };
 
 module.exports.sendErrors = (err, req, res, next) => {
-	const errorDetailsToSend = {
+	//logging error for backend console
+	console.log(err);
+	logger("error", "server", {
 		message: err.message,
 		status: err.status || SERVER_ERROR,
-		error: true
-	};
-	//logging error for backend console
-	console.log(errorDetailsToSend);
-	console.log(err.stack);
-	logger = log4js.getLogger("Logs from sendErrors middleware");
-	logger.error(errorDetailsToSend);
-	logger.error(err.stack);
-	//sending error to frontend
-	sendError(res, err.message, err.status || SERVER_ERROR);
+		stack: err.stack,
+		path: req.originalUrl,
+		user: req.user ? ({ id, name, email, role } = req.user) : undefined
+	});
+	//sending to frontend
+	sendError(res, "Oops! Something went wrong.", err.status || SERVER_ERROR);
 };

@@ -6,12 +6,15 @@ let emailRegex = /^\S+@\S+\.\S+/,
 
 module.exports.userValidation = (req, res, next) => {
 	let { name, email, password } = req.body;
-	if (!name | !email) {
-		return sendError(res, "Email and name are mandatory!!", BAD_REQUEST);
-	}
-	if (emailRegex.test(String(email))) {
-		return next();
-	} else {
-		return sendError(res, "Email not Valid!!", BAD_REQUEST);
-	}
+
+	if (!name) return sendError(res, "Name is not provided.", BAD_REQUEST);
+	if (!email || !emailRegex.test(String(email).trim()))
+		return sendError(res, "Email is not valid.", BAD_REQUEST);
+	if (!password || !passwordRegex.test(String(password).trim()))
+		return sendError(
+			res,
+			"Password should be atleast 8 characters long.",
+			BAD_REQUEST
+		);
+	return next();
 };
