@@ -4,11 +4,15 @@ const runExpressServer = require("./app");
 
 // Check if current process is master.
 if (cluster.isMaster) {
-	// Get total CPU cores.
-	const cpuCount = os.cpus().length;
-	console.log(cpuCount);
-	// Spawn a worker for every core.
-	for (let j = 0; j < cpuCount; j++) {
+	if (process.env.NODE_ENV === "production") {
+		// Get total CPU cores.
+		const cpuCount = os.cpus().length;
+		console.log(cpuCount);
+		// Spawn a worker for every core.
+		for (let j = 0; j < cpuCount; j++) {
+			cluster.fork();
+		}
+	} else {
 		cluster.fork();
 	}
 } else {
