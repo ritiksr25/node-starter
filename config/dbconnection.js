@@ -1,15 +1,19 @@
 const mongoose = require("mongoose");
-const { MONGO_URI } = require("./index");
+const { NODE_ENV, MONGO_URI } = require("./index");
 
 // Map global promises
 mongoose.Promise = global.Promise;
-// Mongoose Connect
 
+// Debugg mongo
+if (NODE_ENV === "development") mongoose.set("debug", true);
+
+// Mongoose Connect
 connectDb = async () => {
 	try {
 		await mongoose.connect(MONGO_URI, {
 			useNewUrlParser: true,
-			useUnifiedTopology: true
+			useUnifiedTopology: true,
+			useCreateIndex: true
 		});
 		console.info("MongoDB Connected");
 	} catch (err) {
